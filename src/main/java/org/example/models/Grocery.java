@@ -7,71 +7,74 @@ import java.util.Scanner;
 public class Grocery {
     public static ArrayList<String> groceryList = new ArrayList<>();
 
-    public static void startGrocery(){
+    public static void startGrocery() {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
         do {
-            System.out.println("0: Uygulamayı durdur");
-            System.out.println("1: Eleman ekle");
-            System.out.println("2: Eleman çıkar");
+            System.out.println("0: Uygulamayı Durdur");
+            System.out.println("1: Eleman Ekle");
+            System.out.println("2: Eleman Çıkar");
             choice = scanner.nextInt();
 
-            switch (choice){
-                case 1:
-                    System.out.println("Eklenmesini istediğiniz elemanları giriniz.");
-                    scanner.nextLine();
-                    String toAdd = scanner.nextLine();
-                    addItems(toAdd);
-                    break;
+            scanner.nextLine();
 
-                case 2:
-                    System.out.println("Çıkarmak istediğiniz elemanları girin:");
-                    scanner.nextLine();
-                    String toRemove = scanner.nextLine();
-                    removeItems(toRemove);
-                    break;
-
+            switch (choice) {
                 case 0:
                     System.out.println("Uygulama durduruldu.");
                     break;
-
+                case 1:
+                    System.out.print("Eklemek istediğiniz elemanları giriniz: ");
+                    String toAdd = scanner.nextLine();
+                    addItems(toAdd);
+                    break;
+                case 2:
+                    System.out.print("Çıkarmak istediğiniz elemanları giriniz: ");
+                    String toRemove = scanner.nextLine();
+                    removeItems(toRemove );
+                    break;
                 default:
-                    System.out.println("Geçersiz seçenek.");
+                    System.out.println("Geçersiz seçim.");
                     break;
             }
         } while (choice != 0);
-        scanner.close();
     }
 
     public static void addItems(String input) {
-        String[] items = input.split(", ");
+        String[] items = input.split(",\\s*");
         for (String item : items) {
-            if (!groceryList.contains(item)) {
+            if (!checkItemIsInList(item)) {
                 groceryList.add(item);
+                System.out.println(item + " eklendi.");
+            } else {
+                System.out.println(item + " zaten listede bulunuyor.");
             }
         }
-        Collections.sort(groceryList);
         printSorted();
     }
 
     public static void removeItems(String input) {
-        String[] items = input.split(", ");
+        String[] items = input.split(",\\s*");
         for (String item : items) {
-            if (groceryList.contains(item)) {
+            if (checkItemIsInList(item)) {
                 groceryList.remove(item);
+                System.out.println(item + " çıkarıldı.");
+            } else {
+                System.out.println(item + " listede bulunamadı.");
             }
         }
-        Collections.sort(groceryList);
         printSorted();
     }
 
+    public static boolean checkItemIsInList(String product) {
+        return groceryList.contains(product);
+    }
+
     public static void printSorted() {
+        Collections.sort(groceryList);
         System.out.println("Listenin Güncel Hali:");
         for (String item : groceryList) {
             System.out.println(item);
         }
     }
-
-
 }
